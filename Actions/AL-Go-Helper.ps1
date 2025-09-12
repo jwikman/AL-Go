@@ -1873,9 +1873,11 @@ function DetermineArtifactUrl {
         $artifact = $artifact.replace('{INSIDERSASTOKEN}', '')
         Write-Host "::Warning::Please update your artifact setting and remove {INSIDERSASTOKEN} from the setting. This is no longer needed."
     }
+    Write-Host "Artifact setting: $artifact"
 
     Write-Host "Checking artifact setting for project"
     if ($artifact -eq "" -and $projectSettings.updateDependencies) {
+        Write-Host "No artifact specified, and updateDependencies is set, determine the artifact based on applicationDependency and country."
         $artifact = Get-BCArtifactUrl -country $projectSettings.country -select all | Where-Object { [Version]$_.Split("/")[4] -ge [Version]$projectSettings.applicationDependency } | Select-Object -First 1
         if (-not $artifact) {
             # Check Insider Artifacts
