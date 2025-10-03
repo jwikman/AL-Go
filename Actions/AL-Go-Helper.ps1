@@ -787,6 +787,10 @@ function CheckAppDependencyProbingPaths {
                 }
                 else {
                     Write-Host "No token available, will attempt to invoke gh auth token for access to repository"
+                    $token = gh auth token
+                    if ($token.StartsWith('no oauth token')){
+                        $token = $null
+                    }
                 }
                 $dependency | Add-Member -name "AuthTokenSecret" -MemberType NoteProperty -Value $token
             }
