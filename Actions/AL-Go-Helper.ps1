@@ -787,8 +787,11 @@ function CheckAppDependencyProbingPaths {
                 }
                 else {
                     Write-Host "No token available, will attempt to invoke gh auth token for access to repository"
-                    $token = gh auth token
-                    if ($token.StartsWith('no oauth token')){
+                    try {
+                        $token = invoke-gh -silent -returnValue auth token
+                    }
+                    catch {
+                        Write-Host "Unable to get token from gh, will attempt to access repository without token. Message: $($_.Exception.Message)"
                         $token = $null
                     }
                 }
