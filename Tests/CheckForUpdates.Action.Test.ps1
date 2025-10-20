@@ -210,6 +210,7 @@ Describe "CheckForUpdates Action: CheckForUpdates.HelperFunctions.ps1" {
         $actionName = "CheckForUpdates"
         $scriptRoot = Join-Path $PSScriptRoot "..\Actions\$actionName" -Resolve
         Import-Module (Join-Path $scriptRoot "..\Github-Helper.psm1") -DisableNameChecking -Force
+        Import-Module (Join-Path $scriptRoot "..\.Modules\ReadSettings.psm1") -DisableNameChecking -Force
         . (Join-Path -Path $scriptRoot -ChildPath "CheckForUpdates.HelperFunctions.ps1")
         [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'actionScript', Justification = 'False positive.')]
         $tmpSrcFile = Join-Path $PSScriptRoot "tempSrcFile.json"
