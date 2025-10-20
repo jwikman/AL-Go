@@ -1,6 +1,7 @@
 ﻿Get-Module TestActionsHelper | Remove-Module -Force
 Import-Module (Join-Path $PSScriptRoot 'TestActionsHelper.psm1')
 Import-Module (Join-Path $PSScriptRoot "..\Actions\TelemetryHelper.psm1")
+Import-Module (Join-Path $scriptRoot "..\.Modules\ReadSettings.psm1") -DisableNameChecking -Force
 $errorActionPreference = "Stop"; $ProgressPreference = "SilentlyContinue"; Set-StrictMode -Version 2.0
 
 Describe "CheckForUpdates Action Tests" {
@@ -80,11 +81,11 @@ Describe('YamlClass Tests') {
         $count | Should -be 19
 
         # Replace all occurances of 'shell: powershell' with 'shell: pwsh'
-        $yaml.ReplaceAll('shell: powershell','shell: pwsh')
+        $yaml.ReplaceAll('shell: powershell', 'shell: pwsh')
         $yaml.content[46].Trim() | Should -be 'shell: pwsh'
 
         # Replace Permissions
-        $yaml.Replace('Permissions:/',@('contents: write','actions: read'))
+        $yaml.Replace('Permissions:/', @('contents: write', 'actions: read'))
         $yaml.content[44].Trim() | Should -be 'shell: pwsh'
         $yaml.content.Count | Should -be 72
 
@@ -210,7 +211,6 @@ Describe "CheckForUpdates Action: CheckForUpdates.HelperFunctions.ps1" {
         $actionName = "CheckForUpdates"
         $scriptRoot = Join-Path $PSScriptRoot "..\Actions\$actionName" -Resolve
         Import-Module (Join-Path $scriptRoot "..\Github-Helper.psm1") -DisableNameChecking -Force
-        Import-Module (Join-Path $scriptRoot "..\.Modules\ReadSettings.psm1") -DisableNameChecking -Force
         . (Join-Path -Path $scriptRoot -ChildPath "CheckForUpdates.HelperFunctions.ps1")
         [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'actionScript', Justification = 'False positive.')]
         $tmpSrcFile = Join-Path $PSScriptRoot "tempSrcFile.json"
